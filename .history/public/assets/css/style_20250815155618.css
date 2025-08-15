@@ -1,0 +1,103 @@
+/* Argentix Genève — Minimalist & Modern theme */
+:root{
+  --bg: #d9d9d9; /* gris clair */
+  --panel: #ffffff;
+  --border: #e6e8ee;
+  --muted: #6b7280;
+  --text: #0f172a;
+  --accent: #2563eb;
+  --accent-600: #1d4ed8;
+  --accent-700: #1e40af;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --radius: 14px;
+  --shadow: 0 10px 24px rgba(15,23,42,.06);
+  --max: 1080px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans";
+  color:var(--text);
+  background:linear-gradient(180deg, var(--bg) 0%, var(--bg) 100%);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+a{color:var(--accent); text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:var(--max); margin:2rem auto; padding:0 1.25rem}
+.topbar{
+  position:sticky; top:0; z-index:20;
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:saturate(180%) blur(10px);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:.9rem 1.25rem;
+}
+.brand{ font-weight:800; letter-spacing:.2px; font-size:1.05rem; color:var(--text) }
+.topbar nav a{ margin-left:1rem; padding:.35rem .6rem; border-radius:10px; transition:background .2s ease, color .2s ease }
+.topbar nav a:hover{ background:#eef2ff; text-decoration:none }
+.footer{ border-top:1px solid var(--border); padding:2.2rem 1.25rem; text-align:center; color:var(--muted) }
+.grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap:1.2rem }
+.card{
+  background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+  padding:1.1rem; box-shadow:var(--shadow);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.card:hover{ transform: translateY(-2px); box-shadow: 0 12px 28px rgba(15,23,42,.09) }
+.card h3{ margin:.1rem 0 .4rem; font-size:1.05rem }
+.card p{ margin:.25rem 0; color:#334155 }
+.btn{
+  display:inline-block; font-weight:600; letter-spacing:.2px;
+  padding:.55rem .9rem; border-radius:12px;
+  background:var(--accent); color:white; border:1px solid var(--accent);
+  transition: background .15s ease, transform .05s ease, box-shadow .15s ease;
+  box-shadow: 0 6px 16px rgba(37,99,235,.18);
+}
+.btn:hover{ background:var(--accent-600); text-decoration:none }
+.btn:active{ background:var(--accent-700); transform: translateY(1px) }
+.btn.outline{ background:transparent; color:var(--accent); border-color:var(--accent); box-shadow:none }
+.btn.outline:hover{ background:#eaf1ff }
+.table{
+  width:100%; border-collapse:separate; border-spacing:0;
+  background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+  overflow:hidden; box-shadow:var(--shadow);
+}
+.table th, .table td{ padding:.9rem .95rem; text-align:left }
+.table thead th{ background:#f3f5fb; color:#1f2937; font-weight:700 }
+.table tbody tr+tr td{ border-top:1px solid var(--border) }
+.table a{ font-weight:600 }
+label{ display:block; margin:.6rem 0; color:#1f2937; font-weight:600 }
+input, select, textarea{
+  width:100%; padding:.65rem .75rem; border:1px solid var(--border); border-radius:12px;
+  background:#fff; color:var(--text); outline:none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+  box-shadow: 0 1px 0 rgba(15,23,42,.02) inset;
+}
+input:focus, select:focus, textarea:focus{
+  border-color:#c7d2fe; box-shadow: 0 0 0 4px rgba(59,130,246,.15);
+}
+.grid-2{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap:1rem }
+.error{
+  border:1px solid #fecaca; background:#fff1f2; color:#991b1b;
+  padding:.75rem .85rem; border-radius:12px; margin:.6rem 0;
+}
+.price{ font-size:1.15rem; font-weight:800 }
+.muted{ color:var(--muted) }
+.stack > * + *{ margin-top:.6rem }
+.center{ display:flex; align-items:center; justify-content:center }
+.mt-1{ margin-top:.25rem } .mt-2{ margin-top:.5rem } .mt-3{ margin-top:1rem }
+.mb-1{ margin-bottom:.25rem } .mb-2{ margin-bottom:.5rem } .mb-3{ margin-bottom:1rem }
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0b1220; --panel:#0f172a; --border:#172036; --text:#e5e7eb;
+    --muted:#9aa3b2; --shadow: 0 10px 24px rgba(0,0,0,.25);
+  }
+  a{ color:#93c5fd }
+  .topbar{ background:rgba(2,6,23,.75); border-bottom-color:#172036 }
+  .footer{ border-top-color:#172036 }
+  .table thead th{ background:#0b1326; color:#eef2ff }
+  input, select, textarea{ background:#0b1326; color:var(--text); border-color:#1e293b }
+  input::placeholder, textarea::placeholder{ color:#94a3b8 }
+}

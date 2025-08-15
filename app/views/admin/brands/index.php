@@ -1,0 +1,16 @@
+<h1>Marques</h1>
+<form method="post" action="<?= url('admin','brandCreate') ?>">
+  <label>Nouvelle marque <input name="name" required></label>
+  <button class="btn" type="submit">Ajouter</button>
+</form>
+<table class="table">
+  <thead><tr><th>Nom</th><th></th></tr></thead>
+  <tbody>
+  <?php foreach ($brands as $b): ?>
+    <tr>
+      <td><?= htmlspecialchars($b['name']) ?></td>
+      <td><a href="<?= url('admin','brandDelete',['id'=>$b['id']]) ?>" onclick="return confirm('Supprimer la marque ?')">Supprimer</a></td>
+    </tr>
+  <?php endforeach; ?>
+  </tbody>
+</table>
