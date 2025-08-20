@@ -1,98 +1,16 @@
-<?php
-require_once __DIR__ . '/../models/Product.php';
-require_once __DIR__ . '/../models/Brand.php';
-class AdminController extends Controller {
-  private function ensureAuth() {
-    if (empty($_SESSION['user'])) {
-      $this->redirect(url('auth', 'login'));
-    }
-  }
-  public function dashboard() {
-    $this->ensureAuth();
-    $this->view('admin/index', ['title' => 'Admin']);
-  }
-  public function products() {
-    $this->ensureAuth();
-    $model = new Product();
-    $products = $model->allActive();
-    $this->view('admin/products/index', ['title'=>'Produits', 'products'=>$products]);
-  }
-  public function productCreate() {
-    $this->ensureAuth();
-    $brands = (new Brand())->all();
-    $error = null;
-    if ($this->isPost()) {
-      $data = [
-        'brand_id' => (int)($_POST['brand_id'] ?? 0),
-        'name' => trim($_POST['name'] ?? ''),
-        'condition' => $_POST['condition'] ?? 'B',
-        'format' => $_POST['format'] ?? '35mm',
-        'price_chf' => (float)($_POST['price_chf'] ?? 0),
-        'stock_qty' => (int)($_POST['stock_qty'] ?? 0),
-        'is_active' => 1,
-        'description' => trim($_POST['description'] ?? ''),
-      ];
-      if ($data['name']==='' or $data['price_chf']<=0) {
-        $error = 'Nom et prix doivent être renseignés (prix > 0).';
-      } else {
-        (new Product())->create($data);
-        $this->redirect(url('admin','products'));
-      }
-    }
-    $this->view('admin/products/create', ['title'=>'Nouveau produit', 'brands'=>$brands, 'error'=>$error]);
-  }
-  public function productEdit() {
-    $this->ensureAuth();
-    $id = (int)($_GET['id'] ?? 0);
-    $model = new Product();
-    $product = $model->find($id);
-    $brands = (new Brand())->all();
-    $error = null;
-    if (!$product) { echo 'Produit introuvable'; return; }
-    if ($this->isPost()) {
-      $data = [
-        'brand_id' => (int)($_POST['brand_id'] ?? 0),
-        'name' => trim($_POST['name'] ?? ''),
-        'condition' => $_POST['condition'] ?? 'B',
-        'format' => $_POST['format'] ?? '35mm',
-        'price_chf' => (float)($_POST['price_chf'] ?? 0),
-        'stock_qty' => (int)($_POST['stock_qty'] ?? 0),
-        'is_active' => isset($_POST['is_active']) ? 1 : 0,
-        'description' => trim($_POST['description'] ?? ''),
-      ];
-      if ($data['name']==='' or $data['price_chf']<=0) {
-        $error = 'Nom et prix doivent être renseignés (prix > 0).';
-      } else {
-        $model->update($id, $data);
-        $this->redirect(url('admin','products'));
-      }
-    }
-    $this->view('admin/products/edit', ['title'=>'Éditer produit', 'product'=>$product, 'brands'=>$brands, 'error'=>$error]);
-  }
-  public function productDelete() {
-    $this->ensureAuth();
-    $id = (int)($_GET['id'] ?? 0);
-    (new Product())->softDelete($id);
-    $this->redirect(url('admin','products'));
-  }
-  public function brands() {
-    $this->ensureAuth();
-    $brands = (new Brand())->all();
-    $this->view('admin/brands/index', ['title'=>'Marques', 'brands'=>$brands]);
-  }
-  public function brandCreate() {
-    $this->ensureAuth();
-    if ($this->isPost()) {
-      $name = trim($_POST['name'] ?? '');
-      if ($name !== '') (new Brand())->create($name);
-      $this->redirect(url('admin','brands'));
-    }
-    $this->view('admin/brands/index', ['title'=>'Marques', 'brands'=>(new Brand())->all()]);
-  }
-  public function brandDelete() {
-    $this->ensureAuth();
-    $id = (int)($_GET['id'] ?? 0);
-    (new Brand())->delete($id);
-    $this->redirect(url('admin','brands'));
-  }
-}
+<?php require_once __DIR__.'/../models/Product.php'; require_once __DIR__.'/../models/Brand.php'; class AdminController extends Controller{
+private function auth(){ if(empty($_SESSION['user'])) $this->redirect(url('auth','login')); }
+public function index(){ $this->auth(); $this->render('admin',['title'=>'Admin']); }
+public function products(){ $this->auth(); $p=(new Product())->allActive(); $this->render('admin_products',['title'=>'Produits','products'=>$p]); }
+public function productCreate(){ $this->auth(); $brands=(new Brand())->all(); $error=null;
+if($_SERVER['REQUEST_METHOD']==='POST'){ $d=['brand_id'=>(int)($_POST['brand_id']??0),'name'=>trim($_POST['name']??''),'condition'=>$_POST['condition']??'B','format'=>$_POST['format']??'35mm','price_chf'=>(float)($_POST['price_chf']??0),'stock_qty'=>(int)($_POST['stock_qty']??0),'is_active'=>1,'description'=>trim($_POST['description']??'')];
+if($d['name']===''||$d['price_chf']<=0){ $error='Nom et prix requis (prix>0).'; } else { (new Product())->create($d); $this->redirect(url('admin','products')); } }
+$this->render('admin_product_form',['title'=>'Nouveau produit','brands'=>$brands,'error'=>$error]); }
+public function productEdit(){ $this->auth(); $id=(int)($_GET['id']??0); $m=new Product(); $prod=$m->find($id); $brands=(new Brand())->all(); $error=null;
+if(!$prod){ echo 'Produit introuvable'; return; } if($_SERVER['REQUEST_METHOD']==='POST'){ $d=['brand_id'=>(int)($_POST['brand_id']??0),'name'=>trim($_POST['name']??''),'condition'=>$_POST['condition']??'B','format'=>$_POST['format']??'35mm','price_chf'=>(float)($_POST['price_chf']??0),'stock_qty'=>(int)($_POST['stock_qty']??0),'is_active'=>isset($_POST['is_active'])?1:0,'description'=>trim($_POST['description']??'')];
+if($d['name']===''||$d['price_chf']<=0){ $error='Nom et prix requis (prix>0).'; } else { $m->update($id,$d); $this->redirect(url('admin','products')); } }
+$this->render('admin_product_form',['title'=>'Éditer produit','brands'=>$brands,'product'=>$prod,'error'=>$error]); }
+public function productDelete(){ $this->auth(); (new Product())->softDelete((int)($_GET['id']??0)); $this->redirect(url('admin','products')); }
+public function brands(){ $this->auth(); $this->render('admin_brands',['title'=>'Marques','brands'=>(new Brand())->all()]); }
+public function brandCreate(){ $this->auth(); if($_SERVER['REQUEST_METHOD']==='POST'){ $n=trim($_POST['name']??''); if($n!=='')(new Brand())->create($n); } $this->redirect(url('admin','brands')); }
+public function brandDelete(){ $this->auth(); (new Brand())->delete((int)($_GET['id']??0)); $this->redirect(url('admin','brands')); }}

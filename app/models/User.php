@@ -1,9 +1,1 @@
-<?php
-require_once __DIR__ . '/../core/Model.php';
-class User extends Model {
-  public function findByEmail(string $email) {
-    $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    return $stmt->fetch();
-  }
-}
+<?php require_once __DIR__.'/../core/Model.php'; class User extends Model{ public function findByEmail(string $e){ $s=$this->db->prepare("SELECT * FROM users WHERE email=?"); $s->execute([$e]); return $s->fetch(); }}

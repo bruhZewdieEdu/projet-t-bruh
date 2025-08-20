@@ -4,7 +4,7 @@ return [
     'host' => 'localhost',
     'name' => 'argentix',
     'user' => 'root',
-    'pass' => 'root',
+    'pass' => '',
     'charset' => 'utf8mb4'
   ],
   'app' => [
